@@ -1,15 +1,16 @@
 // 记账数据
 const accountingData = [
-    { amount: 1249.64, date: '2026-02-08', note: '余额' },
-    { amount: -39.00, date: '2026-02-16', note: 'QQ音乐会员' },
-    { amount: 1300.00, date: '2026-02-20', note: '还钱' },
-    { amount: -39.00, date: '2026-02-28', note: '话费' },
-    { amount: -320.72, date: '2026-02-25', note: '花呗' },
+    { amount: 779.92, date: '2026-03-06', note: '余额' },
     { amount: -39.00, date: '2026-03-16', note: 'QQ音乐会员' },
-    { amount: -404.50, date: '2026-03-25', note: '花呗' },
     { amount: 2350.00, date: '2026-03-25', note: '助学金' },
-    { amount: -39.00, date: '2026-03-29', note: '话费' },
-    { amount: 5000.00, date: '2026-03-31', note: '联培生活费' }
+    { amount: -535.66, date: '2026-03-25', note: '花呗' },
+    { amount: -39.00, date: '2026-03-28', note: '话费' },
+    { amount: 5000.00, date: '2026-03-31', note: '联培生活费' },
+    { amount: 1300.00, date: '2026-04-05', note: '生活费' },
+    { amount: -39.00, date: '2026-04-16', note: 'QQ音乐会员' },
+    { amount: -83.78, date: '2026-04-25', note: '花呗' },
+    { amount: -39.00, date: '2026-04-29', note: '话费' },
+   
 ];
 
 // Accounting Script

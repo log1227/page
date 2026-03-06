@@ -2,42 +2,37 @@
 const todoData = {
     // 重要紧急
     highImportantHighUrgent: [
-        {
-            title: "锻炼胸、腹"
-        },
 	{
-            title: "核热工"
+            title: "课内"
         },
         {
-            title: "开题报告"
+            title: "毕设"
         }
         
     ],
     // 重要不紧急
     highImportantLowUrgent: [
-	{
-            title: "个人网页部署"
-        },
         {
             title: "经济学"
+        },
+	{
+            title: "AI应用开发"
+        },
+	{
+            title: "AI音轨分离、识别声场"
+        },
+	{
+            title: "神经网络成像"
         }
     ],
     // 紧急不重要
     lowImportantHighUrgent: [
-        {
-            title: "AI应用开发"
-        }
+
     ],
     // 不重要不紧急
     lowImportantLowUrgent: [
         {
-            title: "练琴"
-        },
-        {
             title: "庐山、温泉、台湾"
-        },
-        {
-            title: "软件开发、网络安全"
         }
     ]
 };
