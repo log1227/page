@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核工笔记</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" id="backBtn">返回</button>
+            <h1 class="main-title">核工</h1>
+        </header>
+        
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item active" data-subject="hefanyingdui">核反应堆物理</li>
+                <li class="nav-item" data-subject="yibiao">核电厂仪表与控制</li>
+                <li class="nav-item" data-subject="dianqi">核电厂电气原理与设备</li>
+                <li class="nav-item" data-subject="regongshuili">核热工水力</li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="notes-container" id="notes-container">
+                <!-- 笔记内容将通过JS动态加载 -->
+                <div class="loading">加载中...</div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 引入笔记数据 -->
+    <script src="resources/regongshuili.js"></script>
+    
+    <!-- 引入主JS文件 -->
+    <script src="script.js"></script>
+</body>
+</html>

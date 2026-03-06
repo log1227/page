@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE</title>
+    <!-- 引入 Prism.js 代码高亮样式 -->
+    <link rel="stylesheet" href="../assets/css/prism.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 顶部标题栏 */
+        .title-bar {
+            background-color: #3c3c3c;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            color: #cccccc;
+            border-bottom: 1px solid #252526;
+        }
+
+        .title-bar span {
+            margin-right: 20px;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #cccccc;
+            text-decoration: none;
+            padding: 3px 10px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+            margin-right: 15px;
+        }
+
+        .back-btn:hover {
+            background-color: #4c4c4c;
+            color: #ffffff;
+        }
+
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        /* 左侧边栏 */
+        .sidebar {
+            width: 250px;
+            background-color: #252526;
+            border-right: 1px solid #1e1e1e;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 10px 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #bbbbbb;
+            background-color: #2d2d30;
+            border-bottom: 1px solid #1e1e1e;
+        }
+
+        /* 文件树 */
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px 0;
+        }
+
+        .file-tree ul {
+            list-style: none;
+        }
+
+        .file-tree li {
+            padding: 0;
+        }
+
+        .tree-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px 5px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tree-item:hover {
+            background-color: #2a2d2e;
+        }
+
+        .tree-item.active {
+            background-color: #37373d;
+        }
+
+        .tree-item .icon {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .tree-item.folder {
+            font-weight: 500;
+            color: #cccccc;
+        }
+
+        .tree-item.file {
+            color: #d4d4d4;
+            padding-left: 40px;
+        }
+
+        .tree-item.file.html .icon { color: #e34c26; }
+        .tree-item.file.css .icon { color: #264de4; }
+        .tree-item.file.js .icon { color: #f7df1e; }
+        .tree-item.file.python .icon { color: #3776ab; }
+        .tree-item.file.py .icon { color: #3776ab; }
+
+        /* 侧边栏切换按钮 */
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #cccccc;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 10px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #4c4c4c;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 60px;
+                height: calc(100vh - 60px);
+                z-index: 1000;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+
+            .content-area {
+                width: 100%;
+            }
+
+            .tree-item {
+                font-size: 14px;
+                padding: 8px 10px 8px 20px;
+            }
+
+            .tab {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .code-wrapper pre {
+                padding: 15px !important;
+                font-size: 12px !important;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .title-bar {
+                padding: 0 10px;
+            }
+
+            .back-btn span:last-child {
+                display: none;
+            }
+
+            .breadcrumbs {
+                font-size: 11px;
+                padding: 8px 10px;
+            }
+
+            .status-bar {
+                font-size: 10px;
+                padding: 0 10px;
+            }
+
+            .empty-state-icon {
+                font-size: 48px;
+            }
+
+            .empty-state-text {
+                font-size: 14px;
+            }
+        }
+
+        /* 展开/折叠图标 */
+        .expand-icon {
+            margin-right: 5px;
+            font-size: 10px;
+            transition: transform 0.2s;
+            width: 12px;
+            display: inline-block;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        /* 嵌套列表 */
+        .nested {
+            display: none;
+        }
+
+        .nested.show {
+            display: block;
+        }
+
+        /* 右侧内容区 */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e;
+        }
+
+        /* 标签栏 */
+        .tabs-bar {
+            background-color: #2d2d30;
+            display: flex;
+            border-bottom: 1px solid #1e1e1e;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            background-color: #2d2d30;
+            border-right: 1px solid #1e1e1e;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background-color: #1e1e1e;
+            border-top: 2px solid #007acc;
+        }
+
+        .tab:hover {
+            background-color: #2a2d2e;
+        }
+
+        .tab-close {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .tab-close:hover {
+            opacity: 1;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumbs {
+            background-color: #1e1e1e;
+            padding: 5px 15px;
+            font-size: 12px;
+            color: #858585;
+            border-bottom: 1px solid #2d2d30;
+        }
+
+        /* 代码显示区域 */
+        .code-display {
+            flex: 1;
+            overflow: auto;
+            padding: 0;
+            background-color: #1e1e1e;
+        }
+
+        /* 代码块样式 */
+        .code-wrapper {
+            min-height: 100%;
+        }
+
+        .code-wrapper pre {
+            margin: 0 !important;
+            padding: 20px !important;
+            background: transparent !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+        }
+
+        .code-wrapper code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6e6e6e;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #424242;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f4f4f;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            background-color: #007acc;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            color: #ffffff;
+        }
+
+        .status-bar-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .status-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <div class="title-bar">
+        <button class="sidebar-toggle" id="sidebarToggle" title="切换侧边栏">☰</button>
+        <a href="../index.html" class="back-btn">
+            <span>←</span>
+            <span>返回</span>
+        </a>
+        <span>代码浏览器</span>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 侧边栏遮罩层 -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- 左侧边栏 - 文件目录 -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">资源管理器</div>
+            <div class="file-tree" id="fileTree">
+                <!-- 文件树将通过 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 右侧内容区 -->
+        <div class="content-area">
+            <!-- 标签栏 -->
+            <div class="tabs-bar" id="tabsBar">
+                <!-- 标签将通过 JavaScript 动态生成 -->
+            </div>
+
+            <!-- 面包屑导航 -->
+            <div class="breadcrumbs" id="breadcrumbs">
+                请从左侧选择一个文件
+            </div>
+
+            <!-- 代码显示区域 -->
+            <div class="code-display" id="codeDisplay">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📁</div>
+                    <div class="empty-state-text">从左侧目录选择一个文件以查看代码</div>
+                </div>
+            </div>
+
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-bar-left">
+                    <div class="status-bar-item">
+                        <span>📄</span>
+                        <span id="statusFile">就绪</span>
+                    </div>
+                    <div class="status-bar-item">
+                        <span id="statusLines">0 行</span>
+                    </div>
+                    <div class="status-bar-item">
+                        <span id="statusType">UTF-8</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入代码片段 JS 文件 -->
+    <script src="html/基础知识/DOM操作基础知识.js"></script>
+    <script src="html/基础知识/HTML基础知识.js"></script>
+    <script src="html/基础知识/JavaScript基础知识.js"></script>
+    <script src="html/基础知识/CSS基础知识HTML.js"></script>
+    <script src="html/基础知识/CSS基础知识CSS.js"></script>
+    <script src="html/项目/base.js"></script>
+    <script src="html/项目/产品展示页.js"></script>
+    <script src="html/项目/字符匹配.js"></script>
+    <script src="html/项目/水平导航条.js"></script>
+    <script src="html/项目/输入创建列表.js"></script>
+    <script src="html/项目/顶部导航条.js"></script>
+    <script src="python/基础语法.js"></script>
+    <script src="python/算法/KMP算法.js"></script>
+    <script src="python/算法/两数和.js"></script>
+    <script src="python/算法/二叉树前中后序遍历.js"></script>
+    <script src="python/算法/二叉树深度.js"></script>
+    <script src="python/算法/广度优先搜索.js"></script>
+    <script src="python/算法/深度优先搜素.js"></script>
+    <script src="python/算法/移动零.js"></script>
+    <script src="python/算法/重建二叉树.js"></script>
+
+    <!-- 引入 Prism.js 代码高亮脚本 -->
+    <script src="../assets/js/prism.js"></script>
+
+    <!-- 合并所有代码片段变量 -->
+    <script>
+        // 合并所有独立的 codeSnippets 变量到一个统一的对象
+        const codeSnippets = {
+            ...codeSnippets_DOM操作基础知识,
+            ...codeSnippets_HTML基础知识,
+            ...codeSnippets_JavaScript基础知识,
+            ...codeSnippets_CSS基础知识HTML,
+            ...codeSnippets_CSS基础知识CSS,
+            ...codeSnippets_base,
+            ...codeSnippets_产品展示页,
+            ...codeSnippets_字符匹配,
+            ...codeSnippets_水平导航条,
+            ...codeSnippets_输入创建列表,
+            ...codeSnippets_顶部导航条,
+            ...codeSnippets_基础语法,
+            ...codeSnippets_KMP算法,
+            ...codeSnippets_两数和,
+            ...codeSnippets_二叉树前中后序遍历,
+            ...codeSnippets_二叉树深度,
+            ...codeSnippets_广度优先搜索,
+            ...codeSnippets_深度优先搜素,
+            ...codeSnippets_移动零,
+            ...codeSnippets_重建二叉树
+        };
+    </script>
+
+    <script>
+        // 文件树结构
+        const fileTreeData = {
+            name: '代码',
+            type: 'folder',
+            children: [
+                {
+                    name: 'html',
+                    type: 'folder',
+                    children: [
+                        {
+                            name: '基础知识',
+                            type: 'folder',
+                            children: [
+                                { name: 'DOM操作基础知识', type: 'file', ext: 'html', key: 'DOM操作基础知识' },
+                                { name: 'HTML基础知识', type: 'file', ext: 'html', key: 'HTML基础知识' },
+                                { name: 'JavaScript基础知识', type: 'file', ext: 'html', key: 'JavaScript基础知识' },
+                                { name: 'CSS基础知识HTML', type: 'file', ext: 'html', key: 'CSS基础知识HTML' },
+                                { name: 'CSS基础知识CSS', type: 'file', ext: 'css', key: 'CSS基础知识CSS' }
+                            ]
+                        },
+                        {
+                            name: '项目',
+                            type: 'folder',
+                            children: [
+                                { name: 'base', type: 'file', ext: 'html', key: 'base' },
+                                { name: '产品展示页', type: 'file', ext: 'html', key: '产品展示页' },
+                                { name: '字符匹配', type: 'file', ext: 'html', key: '字符匹配' },
+                                { name: '水平导航条', type: 'file', ext: 'html', key: '水平导航条' },
+                                { name: '输入创建列表', type: 'file', ext: 'html', key: '输入创建列表' },
+                                { name: '顶部导航条', type: 'file', ext: 'html', key: '顶部导航条' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'python',
+                    type: 'folder',
+                    children: [
+                        { name: '基础语法', type: 'file', ext: 'py', key: '基础语法' },
+                        {
+                            name: '算法',
+                            type: 'folder',
+                            children: [
+                                { name: 'KMP算法', type: 'file', ext: 'py', key: 'KMP算法' },
+                                { name: '两数和', type: 'file', ext: 'py', key: '两数和' },
+                                { name: '二叉树前中后序遍历', type: 'file', ext: 'py', key: '二叉树前中后序遍历' },
+                                { name: '二叉树深度', type: 'file', ext: 'py', key: '二叉树深度' },
+                                { name: '广度优先搜索', type: 'file', ext: 'py', key: '广度优先搜索' },
+                                { name: '深度优先搜素', type: 'file', ext: 'py', key: '深度优先搜素' },
+                                { name: '移动零', type: 'file', ext: 'py', key: '移动零' },
+                                { name: '重建二叉树', type: 'file', ext: 'py', key: '重建二叉树' }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // 当前打开的标签
+        let openTabs = [];
+        let activeTab = null;
+
+        // 获取文件图标
+        function getFileIcon(ext) {
+            const icons = {
+                'html': '🌐',
+                'css': '🎨',
+                'js': '📜',
+                'python': '🐍',
+                'py': '🐍'
+            };
+            return icons[ext] || '📄';
+        }
+
+        // 获取语言类名
+        function getLanguageClass(ext) {
+            const languages = {
+                'html': 'language-html',
+                'css': 'language-css',
+                'js': 'language-javascript',
+                'python': 'language-python',
+                'py': 'language-python'
+            };
+            return languages[ext] || 'language-text';
+        }
+
+        // 渲染文件树
+        function renderFileTree(node, container, level = 0) {
+            const li = document.createElement('li');
+            
+            if (node.type === 'folder') {
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'tree-item folder';
+                folderDiv.style.paddingLeft = `${10 + level * 15}px`;
+                folderDiv.innerHTML = `
+                    <span class="expand-icon expanded">▶</span>
+                    <span class="icon">📁</span>
+                    <span>${node.name}</span>
+                `;
+                
+                const ul = document.createElement('ul');
+                ul.className = 'nested show';
+                
+                folderDiv.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const icon = folderDiv.querySelector('.expand-icon');
+                    icon.classList.toggle('expanded');
+                    ul.classList.toggle('show');
+                });
+                
+                li.appendChild(folderDiv);
+                li.appendChild(ul);
+                
+                if (node.children) {
+                    node.children.forEach(child => {
+                        renderFileTree(child, ul, level + 1);
+                    });
+                }
+            } else {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = `tree-item file ${node.ext}`;
+                fileDiv.style.paddingLeft = `${10 + level * 15}px`;
+                fileDiv.innerHTML = `
+                    <span class="icon">${getFileIcon(node.ext)}</span>
+                    <span>${node.name}.${node.ext}</span>
+                `;
+                fileDiv.dataset.key = node.key;
+                fileDiv.dataset.name = node.name;
+                fileDiv.dataset.ext = node.ext;
+                
+                fileDiv.addEventListener('click', () => {
+                    // 移除其他活动状态
+                    document.querySelectorAll('.tree-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    fileDiv.classList.add('active');
+                    
+                    // 打开文件
+                    openFile(node.key, node.name, node.ext);
+                });
+                
+                li.appendChild(fileDiv);
+            }
+            
+            container.appendChild(li);
+        }
+
+        // 打开文件
+        function openFile(key, name, ext) {
+            // 检查是否已打开
+            const existingTab = openTabs.find(tab => tab.key === key);
+            if (!existingTab) {
+                openTabs.push({ key, name, ext });
+            }
+            activeTab = key;
+            
+            // 更新标签栏
+            renderTabs();
+            
+            // 显示代码
+            displayCode(key, name, ext);
+        }
+
+        // 渲染标签栏
+        function renderTabs() {
+            const tabsBar = document.getElementById('tabsBar');
+            tabsBar.innerHTML = '';
+            
+            openTabs.forEach(tab => {
+                const tabDiv = document.createElement('div');
+                tabDiv.className = `tab ${tab.key === activeTab ? 'active' : ''}`;
+                tabDiv.innerHTML = `
+                    <span>${getFileIcon(tab.ext)}</span>
+                    <span>${tab.name}.${tab.ext}</span>
+                    <span class="tab-close" data-key="${tab.key}">×</span>
+                `;
+                
+                tabDiv.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('tab-close')) {
+                        e.stopPropagation();
+                        closeTab(tab.key);
+                    } else {
+                        activeTab = tab.key;
+                        renderTabs();
+                        displayCode(tab.key, tab.name, tab.ext);
+                    }
+                });
+                
+                tabsBar.appendChild(tabDiv);
+            });
+        }
+
+        // 关闭标签
+        function closeTab(key) {
+            const index = openTabs.findIndex(tab => tab.key === key);
+            openTabs = openTabs.filter(tab => tab.key !== key);
+            
+            if (activeTab === key) {
+                if (openTabs.length > 0) {
+                    const newIndex = Math.min(index, openTabs.length - 1);
+                    activeTab = openTabs[newIndex].key;
+                    displayCode(openTabs[newIndex].key, openTabs[newIndex].name, openTabs[newIndex].ext);
+                } else {
+                    activeTab = null;
+                    showEmptyState();
+                }
+            }
+            
+            renderTabs();
+        }
+
+        // 显示代码
+        function displayCode(key, name, ext) {
+            const codeDisplay = document.getElementById('codeDisplay');
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const statusFile = document.getElementById('statusFile');
+            const statusLines = document.getElementById('statusLines');
+            const statusType = document.getElementById('statusType');
+            
+            // 获取代码内容
+            const code = codeSnippets[key] || '// 代码未找到';
+            
+            // 计算行数
+            const lines = code.split('\n').length;
+            
+            // 更新面包屑
+            breadcrumbs.textContent = `代码 > ${name}.${ext}`;
+            
+            // 更新状态栏
+            statusFile.textContent = `${name}.${ext}`;
+            statusLines.textContent = `${lines} 行`;
+            statusType.textContent = ext === 'js' ? 'JavaScript' : (ext === 'python' ? 'Python' : 'Text');
+            
+            // 确定代码语言
+            let languageClass = 'language-javascript';
+            if (ext === 'python' || name.includes('算法') || name === '基础语法' || name === '两数和' || name === 'KMP算法' || name.includes('二叉树') || name.includes('搜索') || name === '移动零' || name === '重建二叉树') {
+                languageClass = 'language-python';
+            } else if (ext === 'html' || name.includes('HTML')) {
+                languageClass = 'language-html';
+            } else if (ext === 'css' || name.includes('CSS')) {
+                languageClass = 'language-css';
+            }
+            
+            // 显示代码
+            codeDisplay.innerHTML = `
+                <div class="code-wrapper">
+                    <pre><code class="${languageClass}">${escapeHtml(code)}</code></pre>
+                </div>
+            `;
+            
+            // 应用语法高亮
+            Prism.highlightAll();
+        }
+
+        // 显示空状态
+        function showEmptyState() {
+            const codeDisplay = document.getElementById('codeDisplay');
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const statusFile = document.getElementById('statusFile');
+            const statusLines = document.getElementById('statusLines');
+            
+            breadcrumbs.textContent = '请从左侧选择一个文件';
+            statusFile.textContent = '就绪';
+            statusLines.textContent = '0 行';
+            
+            codeDisplay.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📁</div>
+                    <div class="empty-state-text">从左侧目录选择一个文件以查看代码</div>
+                </div>
+            `;
+        }
+
+        // HTML 转义
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileTree = document.getElementById('fileTree');
+            const ul = document.createElement('ul');
+            renderFileTree(fileTreeData, ul);
+            fileTree.appendChild(ul);
+
+            // 侧边栏切换功能
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('show');
+                sidebarOverlay.classList.toggle('show');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // 点击文件时自动关闭侧边栏（在窄屏下）
+            document.querySelectorAll('.tree-item.file').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // 窗口大小改变时重置侧边栏状态
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大学笔记</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部导航 -->
+        <header class="header">
+            <div class="header-top">
+                <button class="back-btn" id="backBtn" style="display: none;">返回</button>
+                <h1>大学笔记</h1>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#" data-category="math">数学</a></li>
+                    <li class="nav-item"><a href="#" data-category="major">专业课</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 内容区域 -->
+        <main class="main-content">
+            <!-- 内容展示区 -->
+            <div class="content-area" id="contentArea">
+                <!-- 加载状态 -->
+                <div class="loading" id="loading">加载中...</div>
+                
+                <!-- 笔记列表区域 -->
+                <div class="notes-list-container" id="notesListContainer">
+                    <!-- 笔记列表将通过JavaScript动态加载 -->
+                </div>
+                
+                <!-- 笔记内容展示区域 -->
+                <div class="note-content" id="noteContent" style="display: none;">
+                    <h2 class="note-title" id="noteTitle"></h2>
+                    <div class="note-files" id="noteFilesContainer"></div>
+                    <div class="note-actions" id="noteActions"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 总结弹窗 -->
+    <div class="modal" id="summaryModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3>信号与系统总结</h3>
+            <div class="modal-body">
+                <img src="resources/信号与系统总结.png" alt="信号与系统总结" class="summary-img">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

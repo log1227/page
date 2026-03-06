@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Log主页</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <!-- Font Awesome icons (free version)-->
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- Core theme CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet" />
+    <!-- Mind Map CSS -->
+    <link href="assets/css/simpleMindMap.esm.css" rel="stylesheet" />
+  </head>
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Log</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Menu
+          <i class="fas fa-bars ms-1"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+            <!-- 笔记下拉菜单 -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="notesDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                笔记
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="notesDropdown"
+              >
+                <li>
+                  <a class="dropdown-item" href="Note/大学笔记/index.html"
+                    >大学笔记</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="Note/核工/index.html">核工</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="Note/深度学习/book.html"
+                    >深度学习</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="代码/index.html">代码</a>
+                </li>
+              </ul>
+            </li>
+            <!-- 毕业设计下拉菜单 -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="graduationDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                毕业设计
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="graduationDropdown"
+              >
+                <li>
+                  <a class="dropdown-item" href="#" id="graduation-features-btn"
+                    >毕设特点</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" id="ocr-review-btn"
+                    >OCR综述</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" id="tech-route-btn"
+                    >技术路线</a
+                  >
+                </li>
+              </ul>
+            </li>
+
+            <!-- 摄影标签 -->
+            <li class="nav-item">
+              <a class="nav-link" href="Photography/index.html" title="摄影">
+                摄影
+              </a>
+            </li>
+            <!-- 其他下拉菜单 -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="otherDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                其他
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="otherDropdown"
+              >
+                <li>
+                  <a class="dropdown-item" href="#" id="clothes-btn">衣服</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" id="accounting-btn">记账</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" id="todo-btn">代办</a>
+                </li>
+              </ul>
+            </li>
+            <!-- 最近标签 -->
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="recent-btn" title="最近">
+                最近
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Masthead-->
+    <header class="masthead">
+      <div class="container"></div>
+    </header>
+    <!-- Accounting Popup -->
+    <div id="accounting-overlay" class="accounting-overlay">
+      <div class="accounting-container">
+        <div class="accounting-header">
+          <h3>记账记录</h3>
+          <button class="close-btn" id="close-accounting">×</button>
+        </div>
+        <div class="accounting-content">
+          <table id="accounting-table" class="accounting-table">
+            <thead>
+              <tr>
+                <th>金额</th>
+                <th>时间</th>
+                <th>备注</th>
+              </tr>
+            </thead>
+            <tbody id="accounting-body">
+              <!-- Data will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clothes Size Popup -->
+    <div id="clothes-overlay" class="accounting-overlay">
+      <div class="accounting-container">
+        <div class="accounting-header">
+          <h3>尺码</h3>
+          <button class="close-btn" id="close-clothes">×</button>
+        </div>
+        <div class="accounting-content">
+          <table id="clothes-table" class="clothes-table">
+            <thead id="clothes-table-header">
+              <!-- Headers will be populated by JavaScript -->
+            </thead>
+            <tbody id="clothes-table-body">
+              <!-- Data will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activities Popup -->
+    <div id="recent-overlay" class="accounting-overlay">
+      <div class="accounting-container">
+        <div class="accounting-header">
+          <h3>最近活动</h3>
+          <button class="close-btn" id="close-recent">×</button>
+        </div>
+        <div class="accounting-content">
+          <div id="recent-content" class="popup-content">
+            <!-- Content will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Todo Popup -->
+    <div id="todo-overlay" class="accounting-overlay">
+      <div class="accounting-container">
+        <div class="accounting-header">
+          <h3>待办事项</h3>
+          <button class="close-btn" id="close-todo">×</button>
+        </div>
+        <div class="accounting-content">
+          <div id="todo-content" class="todo-content">
+            <!-- Content will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 毕业设计弹窗 -->
+    <div id="graduation-overlay" class="accounting-overlay">
+      <div class="accounting-container">
+        <div class="accounting-header">
+          <h3 id="graduation-title">毕业设计</h3>
+          <button class="close-btn" id="close-graduation">×</button>
+        </div>
+        <div class="accounting-content">
+          <div id="graduation-content">
+            <!-- 内容将由JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 加载数据文件 -->
+    <script src="assets/data/accounting.js"></script>
+    <script src="assets/data/recent.js"></script>
+    <script src="assets/data/clothes.js"></script>
+    <script src="assets/data/biyesheji.js"></script>
+    <script src="assets/data/todo.js"></script>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="assets/js/scripts.js"></script>
+    <!-- Mind Map JS -->
+    <script src="assets/js/simpleMindMap.umd.min.js"></script>
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+  </body>
+</html>

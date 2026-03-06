@@ -1,0 +1,313 @@
+/* CSS样式文件，设计美观的界面 */
+
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* 容器样式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 头部样式 */
+.header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 0;
+  background: linear-gradient(135deg, #1a365d, #2c5282);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 返回按钮样式 */
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* 导航栏样式 */
+.nav {
+  margin-bottom: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: #f0f4f8;
+  color: #2c5282;
+}
+
+.nav-item.active {
+  background-color: #ebf8ff;
+  color: #2c5282;
+  border-bottom-color: #2c5282;
+}
+
+/* 内容区域样式 */
+.content {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  min-height: 600px;
+}
+
+/* 笔记容器样式 */
+.notes-container {
+  line-height: 1.8;
+}
+
+/* 章节标签样式 */
+.chapter-tags {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.chapter-tag {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #ebf8ff;
+  color: #2c5282;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.chapter-tag:hover {
+  background-color: #2c5282;
+  color: white;
+}
+
+/* 笔记内容样式 */
+.notes-content {
+  margin-top: 20px;
+}
+
+.note-section {
+  margin-bottom: 40px;
+}
+
+.note-section h3 {
+  font-size: 1.8rem;
+  color: #1a365d;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* 表格样式 */
+.note-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.note-section table th,
+.note-section table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.note-section table th {
+  background-color: #f7fafc;
+  font-weight: 600;
+  color: #1a365d;
+}
+
+.note-section table tr:hover {
+  background-color: #f7fafc;
+}
+
+/* PDF容器样式 */
+.pdf-container {
+  margin: 20px 0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-container embed {
+  display: block;
+  width: 100%;
+  height: 800px;
+  border: none;
+}
+
+/* 加载状态样式 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  font-size: 1.2rem;
+  color: #718096;
+}
+
+/* 错误状态样式 */
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  font-size: 1.2rem;
+  color: #e53e3e;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .back-btn {
+        left: 10px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+    }
+    
+    .nav-item {
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .nav-item.active {
+        border-bottom-color: #2c5282;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    /* PDF容器响应式样式 */
+    .pdf-container embed {
+        height: 600px;
+    }
+}
+
+/* PDF导航样式 */
+.pdf-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f7fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.pdf-nav-btn {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+}
+
+.pdf-nav-btn:hover {
+    background-color: #ebf8ff;
+    border-color: #2c5282;
+    color: #2c5282;
+}
+
+.pdf-nav-btn.active {
+    background-color: #2c5282;
+    color: white;
+    border-color: #2c5282;
+}
+
+/* PDF嵌入容器样式 */
+.pdf-embed {
+    position: relative;
+}
+
+@media (max-width: 480px) {
+  /* 更小屏幕的PDF容器样式 */
+  .pdf-container embed {
+    height: 500px;
+  }
+  
+  .pdf-nav {
+    flex-direction: column;
+  }
+  
+  .pdf-nav-btn {
+    width: 100%;
+    text-align: left;
+  }
+}
