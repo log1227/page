@@ -49,6 +49,8 @@ const dianqiNotes = {
     `
 };
 
+
+
 // 切换PDF文件函数
 function switchPdf(pdfPath, button) {
     // 移除所有按钮的active类
@@ -88,11 +90,19 @@ const notesMap = {
     regongshuili: regongshuiliNotes,
     hefanyingdui: hefanyingduiNotes,
     yibiao: yibiaoNotes,
-    dianqi: dianqiNotes
+    dianqi: dianqiNotes,
+    qiye: null  // 将在 DOMContentLoaded 中初始化
 };
 
 // 页面加载完成后执行
 window.addEventListener('DOMContentLoaded', function() {
+    // 初始化 qiye 笔记
+    if (typeof window.qiyeNotes !== 'undefined') {
+        notesMap.qiye = window.qiyeNotes;
+    } else if (typeof qiyeNotes !== 'undefined') {
+        notesMap.qiye = qiyeNotes;
+    }
+    
     // 初始加载第一个笔记
     loadNotes('hefanyingdui');
     
@@ -108,9 +118,9 @@ window.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', function() {
-            // 移除所有导航项的active类
+            // 移除所有导航项的 active 类
             navItems.forEach(nav => nav.classList.remove('active'));
-            // 添加当前点击项的active类
+            // 添加当前点击项的 active 类
             this.classList.add('active');
             // 获取要加载的笔记主题
             const subject = this.dataset.subject;
@@ -133,11 +143,129 @@ function loadNotes(subject) {
         const notes = notesMap[subject];
         
         if (notes) {
-            // 加载笔记内容
-            container.innerHTML = notes.content;
+            // 检查是否为动态渲染的笔记
+            if (notes.isDynamic && notes.contentData) {
+                renderDynamicNotes(container, notes.contentData);
+            } else {
+                // 加载笔记内容
+                container.innerHTML = notes.content;
+            }
         } else {
             // 显示错误信息
             container.innerHTML = '<div class="error">笔记加载失败</div>';
         }
     }, 300);
+}
+
+// 动态渲染笔记函数（用于 KaTeX 公式渲染）
+function renderDynamicNotes(container, contentData) {
+    container.innerHTML = '';
+    
+    contentData.forEach(item => {
+        let el;
+        
+        switch (item.type) {
+            case 'header':
+                el = document.createElement(`h${item.level}`);
+                el.className = item.level === 1 ? 'doc-title' : (item.level === 2 ? 'section-title' : 'subsection-title');
+                el.innerHTML = item.text;
+                break;
+            
+            case 'text':
+                el = document.createElement('p');
+                el.className = item.className || 'content-text';
+                el.innerHTML = item.text;
+                break;
+            
+            case 'formula':
+                el = document.createElement('div');
+                el.className = 'formula-container';
+                el.textContent = `$$ ${item.latex} $$`;
+                break;
+            
+            case 'list':
+                const listContainer = document.createElement('ul');
+                listContainer.className = 'list-box';
+                item.items.forEach(listItem => {
+                    const li = document.createElement('li');
+                    li.className = 'list-item';
+                    li.innerHTML = listItem;
+                    listContainer.appendChild(li);
+                });
+                el = listContainer;
+                break;
+            
+            case 'table':
+                const tableContainer = document.createElement('div');
+                tableContainer.className = 'table-container';
+                tableContainer.style.overflowX = 'auto';
+                tableContainer.style.margin = '20px 0';
+                
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
+                table.style.marginTop = '10px';
+                
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                item.headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.innerHTML = header;
+                    th.style.border = '1px solid #ddd';
+                    th.style.padding = '12px';
+                    th.style.backgroundColor = '#f2f2f2';
+                    th.style.textAlign = 'left';
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                const tbody = document.createElement('tbody');
+                item.rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.innerHTML = cell;
+                        td.style.border = '1px solid #ddd';
+                        td.style.padding = '12px';
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                table.appendChild(tbody);
+                tableContainer.appendChild(table);
+                el = tableContainer;
+                break;
+            
+            case 'divider':
+                el = document.createElement('hr');
+                el.className = 'divider';
+                el.style.border = '0';
+                el.style.height = '1px';
+                el.style.backgroundImage = 'linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0))';
+                el.style.margin = '40px 0';
+                break;
+            
+            default:
+                console.warn('Unknown item type:', item.type);
+                return;
+        }
+        
+        if (el) {
+            container.appendChild(el);
+        }
+    });
+    
+    // 触发 KaTeX 渲染
+    if (typeof renderMathInElement === 'function') {
+        renderMathInElement(container, {
+            delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false },
+                { left: '\\(', right: '\\)', display: false },
+                { left: '\\[', right: '\\]', display: true }
+            ],
+            throwOnError: false
+        });
+    }
 }

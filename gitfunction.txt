@@ -1,0 +1,5 @@
+cd
+git status
+git add .
+git commit -m "描述你这次修改的内容"
+git push origin main
