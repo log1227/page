@@ -91,7 +91,8 @@ const notesMap = {
     hefanyingdui: hefanyingduiNotes,
     yibiao: yibiaoNotes,
     dianqi: dianqiNotes,
-    qiye: null  // 将在 DOMContentLoaded 中初始化
+    qiye: null,  // 将在 DOMContentLoaded 中初始化
+    hefushefanghu: null  // 将在 DOMContentLoaded 中初始化
 };
 
 // 页面加载完成后执行
@@ -101,6 +102,13 @@ window.addEventListener('DOMContentLoaded', function() {
         notesMap.qiye = window.qiyeNotes;
     } else if (typeof qiyeNotes !== 'undefined') {
         notesMap.qiye = qiyeNotes;
+    }
+    
+    // 初始化 hefushefanghu 笔记
+    if (typeof window.hefushefanghuNotes !== 'undefined') {
+        notesMap.hefushefanghu = window.hefushefanghuNotes;
+    } else if (typeof hefushefanghuNotes !== 'undefined') {
+        notesMap.hefushefanghu = hefushefanghuNotes;
     }
     
     // 初始加载第一个笔记
